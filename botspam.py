@@ -1,11 +1,6 @@
 import asyncio
 from telethon import TelegramClient, events
 
-API_ID = 123456  # замени на свой API_ID
-API_HASH = 'your_api_hash'  # замени на свой API_HASH
-
-CHAT_ID = -1002035705007  # твоя группа
-
 user_client = TelegramClient('user_session', API_ID, API_HASH)
 bot_client = TelegramClient('bot_session', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
 
@@ -62,4 +57,5 @@ async def main():
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.run_until_complete(main())
+
 
