@@ -1,5 +1,12 @@
+import os
 import asyncio
 from telethon import TelegramClient, events
+
+# Получаем из переменных окружения (типа Railway Variables)
+API_ID = int(os.getenv('API_ID'))
+API_HASH = os.getenv('API_HASH')
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+CHAT_ID = int(os.getenv('CHAT_ID'))
 
 user_client = TelegramClient('user_session', API_ID, API_HASH)
 bot_client = TelegramClient('bot_session', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
@@ -55,7 +62,4 @@ async def main():
     )
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-
-
+    asyncio.run(main())
