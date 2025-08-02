@@ -1,3 +1,4 @@
 requests
 flask
 telethon
+pip install --upgrade telethon
