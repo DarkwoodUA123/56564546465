@@ -2,11 +2,21 @@ import os
 import asyncio
 from telethon import TelegramClient, events
 
-# Получаем из переменных окружения (типа Railway Variables)
-API_ID = int(os.getenv('API_ID'))
+def get_env_int(var_name):
+    raw = os.getenv(var_name)
+    print(f"Raw {var_name} from env: '{raw}'")  # Отладка — показываем, что пришло
+    if raw is None:
+        raise ValueError(f"Environment variable {var_name} is not set")
+    cleaned = raw.strip().lstrip('=')  # Убираем пробелы и ведущие '='
+    return int(cleaned)
+
+API_ID = get_env_int('API_ID')
 API_HASH = os.getenv('API_HASH')
 BOT_TOKEN = os.getenv('BOT_TOKEN')
-CHAT_ID = int(os.getenv('CHAT_ID'))
+CHAT_ID = get_env_int('CHAT_ID')
+
+if not API_HASH or not BOT_TOKEN:
+    raise ValueError("API_HASH or BOT_TOKEN environment variables are not set")
 
 user_client = TelegramClient('user_session', API_ID, API_HASH)
 bot_client = TelegramClient('bot_session', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
