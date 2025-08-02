@@ -1,3 +1,4 @@
+import os
 import asyncio
 from telethon import TelegramClient, events
 
@@ -12,10 +13,14 @@ bot_client = TelegramClient('bot_session', API_ID, API_HASH)
 spam_task = None
 
 async def spam_loop(text, count):
-    for i in range(count):
-        await user_client.send_message(CHAT_ID, text)
-        print(f"[Спам] Сообщение #{i+1} отправлено: {text}")
-        await asyncio.sleep(0.1)
+    try:
+        for i in range(count):
+            await user_client.send_message(CHAT_ID, text)
+            print(f"[Спам] Сообщение #{i+1} отправлено: {text}")
+            await asyncio.sleep(0.1)
+    except asyncio.CancelledError:
+        print("Спам отменён пользователем.")
+        raise
 
 @bot_client.on(events.NewMessage(pattern=r'^/spam (\d+) (.+)'))
 async def start_spam(event):
@@ -42,6 +47,10 @@ async def stop_spam(event):
     global spam_task
     if spam_task:
         spam_task.cancel()
+        try:
+            await spam_task
+        except asyncio.CancelledError:
+            pass
         spam_task = None
         await event.reply("Спам остановлен.")
     else:
